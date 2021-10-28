@@ -1,3 +1,3 @@
-A simple NodeJS and React client and server/n
-server- in server.js/n
+A simple NodeJS and React client and server, 
+the server- in server.js, 
 client- in client/App.js

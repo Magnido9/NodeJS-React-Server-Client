@@ -33,13 +33,15 @@ class App extends Component {
           <table border={2} cellPadding={5}>
             <thead>
               <tr>
-                <td>date</td>
-                <td>source number</td>
-                <td>destination number</td>
+              {//get the keys
+                  Object.keys( this.state.response[0]).map(function (key) {
+                    return <td>{key}</td>;
+                  })
+              }
               </tr>
             </thead>
             <tbody>
-              {
+              {//get the values
                 this.state.response.map(function (element) {
                   return Object.keys(element).map(function (key) {
                     return <td>{element[key]}</td>;

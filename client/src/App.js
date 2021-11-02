@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as d3 from 'd3';
 import './App.css';
 
 class App extends Component {
@@ -19,40 +20,34 @@ class App extends Component {
     const body = await response.json();
     return body;
   };
-
   render() {
     //if its not loaded yet- the response from server hasnt arrived yet
     if (!this.state.response) {
       return <span>Loading...</span>;
     }
-    //else we use map to map the each line of the json into the table
-    return (
-      <div className="App">
-        <div>
-          <h2>Data:</h2>
-          <table border={2} cellPadding={5}>
-            <thead>
-              <tr>
-              {//get the keys
-                  Object.keys( this.state.response[0]).map(function (key) {
-                    return <td>{key}</td>;
-                  })
-              }
-              </tr>
-            </thead>
-            <tbody>
-              {//get the values
-                this.state.response.map(function (element) {
-                  return Object.keys(element).map(function (key) {
-                    return <td>{element[key]}</td>;
-                  })
-                })
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
+    //else we use map to map each line of the json into the table, and append it using d3
+
+    //if no table exists- create and append a new table using d3
+    if (d3.select("div").selectAll("table").size() == 0) {
+      var table= d3.select("div").append("table");
+      table.append("tbody");
+    }
+
+    //append the keys to the first line of the table- the title for each row
+    Object.keys(this.state.response[0]).map(function (key) {
+      return d3.select("div").select("table").select("tbody").append("td").text(key);
+    });
+
+    //append the values of the keys, each one in a different row
+    this.state.response.map(function (element) {
+      d3.select("div").select("table").select("tbody").append("tr");
+      return Object.keys(element).map(function (key) {
+        d3.select("div").select("table").select("tbody").append("td").text(element[key]);
+      });
+    });
+
+    //the page we return will initially empty and then appended the table using d3
+    return (<div className="App"></div>);
   }
 }
 
